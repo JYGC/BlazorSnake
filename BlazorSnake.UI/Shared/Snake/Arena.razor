@@ -1,0 +1,24 @@
+﻿@using Blazor.Extensions.Canvas
+
+<BECanvas
+    Width="@(__arenaSize * __cellSize)"
+    Height="@(__arenaSize * __cellSize)"
+    @ref="__canvasReference">
+</BECanvas>
+<table>
+    <tr>
+        <td></td>
+        <td><button @onclick="__GoUp">U</button></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><button @onclick="__GoLeft">L</button></td>
+        <td></td>
+        <td><button @onclick="__GoRight">R</button></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><button @onclick="__GoDown">D</button></td>
+        <td></td>
+    </tr>
+</table>
