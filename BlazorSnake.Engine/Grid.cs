@@ -4,17 +4,9 @@
     {
         public int Size { get; private set; }
 
-        public Snake Snake { get; private set; }
-        public Prey Prey { get; private set; }
-
-        public Grid(int size, out Snake snake, out Prey prey)
+        public Grid(int size)
         {
             Size = size;
-            
-            Snake = new Snake(this);
-            Prey = new Prey(this);
-            snake = Snake;
-            prey = Prey;
         }
 
         public bool IsPositionOutside(Position position)

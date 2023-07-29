@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using BlazorSnake.UI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BlazorSnake.UI.App
 {
@@ -21,7 +22,7 @@ namespace BlazorSnake.UI.App
 		builder.Logging.AddDebug();
 #endif
 
-            ServiceHelper.AddService(builder.Services);
+            ServiceHelper.ConfigureServices(builder.Services);
 
             return builder.Build();
         }

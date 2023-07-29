@@ -1,0 +1,32 @@
+﻿@page "/expection"
+
+@foreach (var expection in __exceptionTexts)
+{
+    <h3>@expection</h3>
+}
+
+@code {
+    private List<string> __exceptionTexts;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            throw new Exception("User is having a hissy fit",
+                new Exception("User is a sore loser",
+                    new Exception("User lost the game")));
+        }
+        catch(Exception ex)
+        {
+            __exceptionTexts = __ExceptionToString(ex);
+        }
+    }
+
+    private List<string> __ExceptionToString(Exception ex)
+    {
+        var exceptionTexts = new List<string> { $"{ex.Message}: {ex.StackTrace}" };
+        if (ex.InnerException == null) return exceptionTexts;
+        exceptionTexts.Add("===== Inner Exception =====");
+        return (exceptionTexts).Concat(__ExceptionToString(ex.InnerException)).ToList();
+    }
+}

@@ -12,11 +12,11 @@
     {
         private readonly int __startingLength = 3;
 
-        private readonly Grid __grid;
+        private readonly Game __game;
 
-        public Snake(Grid grid)
+        public Snake(Game game)
         {
-            __grid = grid;
+            __game = game;
             __Spawn();
         }
 
@@ -29,8 +29,8 @@
             {
                 Positions.Add(new Position
                 {
-                    Left = __grid.Size / 2 - __startingLength / 2 + i,
-                    Top = __grid.Size / 2,
+                    Left = __game.Grid.Size / 2 - __startingLength / 2 + i,
+                    Top = __game.Grid.Size / 2,
                 });
             }
         }
@@ -62,7 +62,7 @@
 
         private void __Eat()
         {
-            __grid.Prey.Eaten();
+            __game.Prey.Eaten();
             __growth = __growthRate;
         }
         #endregion
@@ -85,17 +85,22 @@
             
             __blockChangingDirection = false;
 
-            if (__HasCaughtPrey()) __Eat();
+            if (__HasCaughtPrey())
+            {
+                __Eat();
+                __game.IncreaseScore();
+                __game.IncreaseSpeed();
+            }
         }
 
         private bool __HasCaughtPrey()
         {
-            return __Head.Left == __grid.Prey.Position.Left && __Head.Top == __grid.Prey.Position.Top;
+            return __Head.Left == __game.Prey.Position.Left && __Head.Top == __game.Prey.Position.Top;
         }
 
         private bool __HasHitWall()
         {
-            return __grid.IsPositionOutside(Positions[0]);
+            return __game.Grid.IsPositionOutside(Positions[0]);
         }
 
         private bool __HasHitSelf()

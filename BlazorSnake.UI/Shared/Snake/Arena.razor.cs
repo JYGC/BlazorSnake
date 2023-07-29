@@ -1,12 +1,16 @@
 ﻿using Blazor.Extensions.Canvas.Canvas2D;
 using Blazor.Extensions;
 using BlazorSnake.Engine;
+using Microsoft.AspNetCore.Components;
+using BlazorSnake.UI.Services;
 
 namespace BlazorSnake.UI.Shared.Snake
 {
     partial class Arena
     {
-        private const int __arenaSize = 34;
+        [Parameter]
+        public Action ShowGameOverModal { get; set; }
+
         private const int __cellSize = 10;
         private const string __arenaBackgroundColor = "#434d5c";
         private const string __preyColor = "#d15f13";
@@ -15,44 +19,21 @@ namespace BlazorSnake.UI.Shared.Snake
         private Canvas2DContext? __context;
         private BECanvasComponent? __canvasReference;
 
-        private int __startingGameSpeed = 700;
+        private Game __game;
 
-        private System.Timers.Timer __timer;
+        [Inject]
+        SettingsService SettingsService { get; set; }
 
-        private Grid __grid;
-        private Prey __prey;
-        private Engine.Snake __snake;
-
-        public Arena()
-        {
-            __grid = new Grid(__arenaSize, out __snake, out __prey);
-        }
+        [Inject]
+        NavigationManager NavManager { get; set; }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
-            __timer = new System.Timers.Timer(__startingGameSpeed);
-            __timer.Elapsed += __GoToNextInterval;
-            __timer.Enabled = true;
-
-            //var timer = new System.Threading.Timer((_) =>
-            //{
-            //    InvokeAsync(() =>
-            //    {
-            //        __prey.Move();
-            //        __snake.Move();
-            //        StateHasChanged();
-            //    });
-            //}, null, 0, __startingGameSpeed);
-        }
-
-        private void __GoToNextInterval(object? source, System.Timers.ElapsedEventArgs e)
-        {
-            __prey.Move();
-            __snake.Move();
-            __timer.Enabled = __snake.IsAlive;
-            InvokeAsync(StateHasChanged);
+            __game = new Game(SettingsService.GetSettings());
+            __game.StateUpdateAction = () => { InvokeAsync(StateHasChanged); };
+            __game.GameOverAction = () => { ShowGameOverModal?.Invoke(); };
+            __game.Start();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -68,7 +49,7 @@ namespace BlazorSnake.UI.Shared.Snake
         {
             if (__context == null) return;
             await __context.SetFillStyleAsync(__arenaBackgroundColor);
-            await __context.FillRectAsync(0, 0, __grid.Size * __cellSize, __grid.Size * __cellSize);
+            await __context.FillRectAsync(0, 0, __game.Grid.Size * __cellSize, __game.Grid.Size * __cellSize);
 
         }
 
@@ -76,35 +57,40 @@ namespace BlazorSnake.UI.Shared.Snake
         {
             if (__context == null) return;
             await __context.SetFillStyleAsync(__preyColor);
-            await __context.FillRectAsync(__prey.Position.Left * __cellSize, __prey.Position.Top * __cellSize, __cellSize, __cellSize);
+            await __context.FillRectAsync(__game.Prey.Position.Left * __cellSize, __game.Prey.Position.Top * __cellSize, __cellSize, __cellSize);
         }
 
         private async Task __DrawSnake()
         {
             if (__context == null) return;
             await __context.SetFillStyleAsync(__snakeColor);
-            foreach (var position in __snake.Positions)
+            foreach (var position in __game.Snake.Positions)
                 await __context.FillRectAsync(position.Left * __cellSize, position.Top * __cellSize, __cellSize, __cellSize);
         }
 
         private void __GoUp()
         {
-            __snake.GoUp();
+            __game.Snake.GoUp();
         }
 
         private void __GoDown()
         {
-            __snake.GoDown();
+            __game.Snake.GoDown();
         }
 
         private void __GoLeft()
         {
-            __snake.GoLeft();
+            __game.Snake.GoLeft();
         }
 
         private void __GoRight()
         {
-            __snake.GoRight();
+            __game.Snake.GoRight();
+        }
+        private void __BackToMenu()
+        {
+            __game.End();
+            NavManager.NavigateTo("/");
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿@page "/"
+@inject NavigationManager NavManager
+
+<p><button @onclick="__GoToNewGame">New game</button></p>
+<p><button @onclick="__GoToSettings">Settings</button></p>
+
+@code
+{
+    private void __GoToNewGame()
+    {
+        NavManager.NavigateTo("/snake");
+    }
+
+    private void __GoToSettings()
+    {
+        NavManager.NavigateTo("/settings");
+    }
+}

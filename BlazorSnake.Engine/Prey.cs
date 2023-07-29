@@ -16,13 +16,12 @@
     {
         private readonly Random __random;
 
-        private readonly Grid __grid;
+        private readonly Game __game;
 
-        public Prey(Grid grid)
+        public Prey(Game game)
         {
             __random = new Random();
-            __grid = grid;
-            //__moveCountDown = MoveDelay;
+            __game = game;
             __SetRandomPosition();
             __SetRandomDirection();
         }
@@ -31,8 +30,8 @@
         {
             var position = new Position
             {
-                Left = __random.Next(0, __grid.Size - 1),
-                Top = __random.Next(0, __grid.Size - 1)
+                Left = __random.Next(0, __game.Grid.Size - 1),
+                Top = __random.Next(0, __game.Grid.Size - 1)
             };
             Position = position;
         }
@@ -42,9 +41,10 @@
         private bool __AvoidBorderAndSnake()
         {
             var __nextPosition = __CalculateNextPosition();
-            var __nextSnakeHead = __grid.Snake.CalculateNextHead();
-            return __grid.IsPositionOutside(__nextPosition)
-                || __nextPosition.Left == __nextSnakeHead.Left && __nextPosition.Top == __nextSnakeHead.Top;
+            var __nextSnakeHead = __game.Snake.CalculateNextHead();
+            return __game.Grid.IsPositionOutside(__nextPosition)
+                || __nextPosition.Left == __nextSnakeHead.Left && __nextPosition.Top == __nextSnakeHead.Top
+                || __game.Snake.Positions.Any(p => __nextPosition.Left == p.Left && __nextPosition.Top == p.Top);
         }
 
         public void Eaten()
@@ -53,8 +53,8 @@
             while (tryCreateFoodAgain)
             {
                 __SetRandomPosition();
-                tryCreateFoodAgain = __grid.IsPositionOutside(Position)
-                    || __grid.Snake.Positions.Any(p => p.Left == Position.Left && p.Top == Position.Top);
+                tryCreateFoodAgain = __game.Grid.IsPositionOutside(Position)
+                    || __game.Snake.Positions.Any(p => p.Left == Position.Left && p.Top == Position.Top);
             }
         }
 
@@ -122,7 +122,7 @@
 
         // Movement code
 
-        private const int __moveDelay = 1;
+        private const int __moveDelay = 2;
         private int __moveCountDown = 0;
         public void Move()
         {

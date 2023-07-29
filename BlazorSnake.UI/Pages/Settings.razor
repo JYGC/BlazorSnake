@@ -1,0 +1,35 @@
+﻿@page "/settings"
+
+@using BlazorSnake.DTOs;
+@using BlazorSnake.UI.Services;
+
+@inject SettingsService SettingsService
+@inject NavigationManager NavManager
+
+<h3>Settings</h3>
+@if (__gameSettings == null)
+{
+    <p>Can't get settings</p>
+}
+else
+{
+    <p>Map size: <input @bind-value=@__gameSettings.GridSize /></p>
+    <p>Starting time interval: <input @bind-value=@__gameSettings.StartingTimeBetweenIntervals /></p>
+}
+<p><button @onclick=__SaveAndGoToMenu>Save</button></p>
+
+@code {
+    private GameSettings? __gameSettings;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        __gameSettings = SettingsService.GetSettings();
+    }
+
+    private void __SaveAndGoToMenu()
+    {
+        SettingsService.SetSettings(__gameSettings);
+        NavManager.NavigateTo("/");
+    }
+}

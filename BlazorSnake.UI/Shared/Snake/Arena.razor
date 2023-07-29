@@ -1,10 +1,13 @@
 ﻿@using Blazor.Extensions.Canvas
-
-<BECanvas
-    Width="@(__arenaSize * __cellSize)"
-    Height="@(__arenaSize * __cellSize)"
+<p><button @onclick="__BackToMenu">Back to main menu</button></p>
+<p>
+    <BECanvas Width="@(__game.Grid.Size * __cellSize)"
+              Height="@(__game.Grid.Size * __cellSize)"
     @ref="__canvasReference">
-</BECanvas>
+    </BECanvas>
+</p>
+<p>Score: @__game.Score</p>
+<p>Time between intervals: @__game.TimeBetweenInterval</p>
 <table>
     <tr>
         <td></td>

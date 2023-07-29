@@ -1,0 +1,18 @@
+﻿@inject NavigationManager NavManager
+
+<h3><red>YOU LOST. GAME OVER</red></h3>
+
+<p><button @onclick="__BackToMenu">Back to main menu</button></p>
+<p><button @onclick="__GoToExceptionPage">Throw an exception</button></p>
+
+@code {
+    private void __BackToMenu()
+    {
+        NavManager.NavigateTo("/");
+    }
+
+    private void __GoToExceptionPage()
+    {
+        NavManager.NavigateTo("/expection");
+    }
+}

@@ -1,4 +1,5 @@
 using BlazorSnake.UI;
+using BlazorSnake.UI.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -15,6 +16,6 @@ builder.Services.AddOidcAuthentication(options =>
     builder.Configuration.Bind("Local", options.ProviderOptions);
 });
 
-ServiceHelper.AddService(builder.Services);
+ServiceHelper.ConfigureServices(builder.Services);
 
 await builder.Build().RunAsync();

@@ -1,5 +1,21 @@
-﻿@page "/"
+﻿@page "/snake"
 
 @using BlazorSnake.UI.Shared.Snake
+@using BlazorSnake.UI.Shared.Snake.Modal;
 
-<Arena />
+<Arena ShowGameOverModal="@__ShowGameOverModal" />
+
+@code
+{
+    [CascadingParameter] public IModalService? Modal { get; set; }
+
+    private void __ShowGameOverModal()
+    {
+        if (Modal != null) Modal.Show<GameOver>("", new ModalOptions
+        {
+            DisableBackgroundCancel = true,
+            ActivateFocusTrap = true,
+            HideCloseButton = true,
+        });
+    }
+}
