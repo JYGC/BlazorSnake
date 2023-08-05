@@ -14,9 +14,10 @@
 
         private readonly Game __game;
 
-        public Snake(Game game)
+        public Snake(Game game, int growthRate)
         {
             __game = game;
+            __growthRate = growthRate;
             __Spawn();
         }
 
@@ -52,7 +53,7 @@
         #endregion
 
         #region Growth
-        private const int __growthRate = 1;
+        private readonly int __growthRate;
         private int __growth = 0;
 
         private void __Grow()

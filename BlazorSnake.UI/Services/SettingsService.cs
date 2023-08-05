@@ -17,7 +17,8 @@ namespace BlazorSnake.UI.Services
             return new GameSettings
             {
                 GridSize = __settings.GridSize,
-                StartingTimeBetweenIntervals = __settings.StartingTimeBetweenIntervals
+                StartingTimeBetweenIntervals = __settings.StartingTimeBetweenIntervals,
+                GrowthRate = __settings.GrowthRate,
             };
         }
 
@@ -29,6 +30,7 @@ namespace BlazorSnake.UI.Services
             }
             __settings.GridSize = settings.GridSize;
             __settings.StartingTimeBetweenIntervals = settings.StartingTimeBetweenIntervals;
+            __settings.GrowthRate = settings.GrowthRate;
         }
     }
 }

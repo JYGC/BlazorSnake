@@ -17,7 +17,7 @@ namespace BlazorSnake.Engine
         public Game(GameSettings settings)
         {
             Grid = new Grid(settings.GridSize);
-            Snake = new Snake(this);
+            Snake = new Snake(this, settings.GrowthRate);
             Prey = new Prey(this);
 
             TimeBetweenInterval = settings.StartingTimeBetweenIntervals;

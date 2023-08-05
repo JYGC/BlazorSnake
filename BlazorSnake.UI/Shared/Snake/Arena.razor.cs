@@ -38,11 +38,18 @@ namespace BlazorSnake.UI.Shared.Snake
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await base.OnAfterRenderAsync(firstRender);
-            __context = await __canvasReference.CreateCanvas2DAsync();
-            await __DrawArena();
-            await __DrawPrey();
-            await __DrawSnake();
+            try
+            {
+                await base.OnAfterRenderAsync(firstRender);
+                __context = await __canvasReference.CreateCanvas2DAsync();
+                await __DrawArena();
+                await __DrawPrey();
+                await __DrawSnake();
+            }
+            catch (Exception ex)
+            {
+                _ = ex;
+            }
         }
 
         private async Task __DrawArena()
@@ -64,7 +71,8 @@ namespace BlazorSnake.UI.Shared.Snake
         {
             if (__context == null) return;
             await __context.SetFillStyleAsync(__snakeColor);
-            foreach (var position in __game.Snake.Positions)
+            var snakePositions = __game.Snake.Positions.ToList();
+            foreach (var position in snakePositions)
                 await __context.FillRectAsync(position.Left * __cellSize, position.Top * __cellSize, __cellSize, __cellSize);
         }
 
