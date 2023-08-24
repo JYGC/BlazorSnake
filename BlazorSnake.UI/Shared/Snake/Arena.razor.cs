@@ -98,7 +98,7 @@ namespace BlazorSnake.UI.Shared.Snake
         private void __BackToMenu()
         {
             __game.End();
-            NavManager.NavigateTo("/");
+            NavManager.NavigateTo("/BlazorSnake/");
         }
     }
 }
