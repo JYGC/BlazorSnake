@@ -17,6 +17,8 @@ jobs:
       run: dotnet workload restore
     - name: Publish with dotnet
       run: dotnet publish --configuration Release --output build
+    - name: Add .nojekyll file
+      run: touch release/wwwroot/.nojekyll
     - name: Deploy to Github Pages
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
